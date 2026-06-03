@@ -1,9 +1,14 @@
 # This script loads .env and starts the backend
 $PSScriptRoot = Get-Location
 
-if (Test-Path ".env") {
-    Write-Host "Loading .env file..." -ForegroundColor Cyan
-    Get-Content .env | ForEach-Object {
+$EnvPath = ".env"
+if (-not (Test-Path $EnvPath)) {
+    $EnvPath = "backend\.env"
+}
+
+if (Test-Path $EnvPath) {
+    Write-Host "Loading $EnvPath file..." -ForegroundColor Cyan
+    Get-Content $EnvPath | ForEach-Object {
         $line = $_.Trim()
         if ($line -and -not $line.StartsWith("#")) {
             if ($line -match '^([^=]+)=(.*)$') {

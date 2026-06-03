@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.smartcampus.model.User;
@@ -22,6 +23,7 @@ import com.smartcampus.repository.UserRepository;
  * Module C — Maintenance & Incident Ticketing
  * Member 3: feature/tickets
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
@@ -146,21 +148,21 @@ public class TicketServiceImpl implements TicketService {
         );
 
         // Notify Technician
-        System.out.println("[DEBUG] Assigning Technician: " + technicianId + " to Ticket: " + saved.getId());
+        log.debug("Assigning Technician: {} to Ticket: {}", technicianId, saved.getId());
         boolean isUrgent = saved.getPriority() != null && 
                           (saved.getPriority() == Ticket.Priority.HIGH || saved.getPriority() == Ticket.Priority.CRITICAL);
         
-        System.out.println("[DEBUG] Priority is urgent: " + isUrgent);
+        log.debug("Priority is urgent: {}", isUrgent);
         
         notificationService.createNotification(
             technicianId,
-            isUrgent ? "URGENT Maintanance Assigned" : "New Ticket Assigned",
+            isUrgent ? "URGENT Maintenance Assigned" : "New Ticket Assigned",
             isUrgent ? "Critical priority ticket requires immediate attention: " + saved.getCategory()
                      : "You have been assigned a new ticket: " + saved.getCategory(),
             isUrgent ? Notification.NotificationType.URGENT_PRIORITY_ALERT : Notification.NotificationType.TICKET_ASSIGNED,
             saved.getId()
         );
-        System.out.println("[DEBUG] Technician notification created successfully");
+        log.debug("Technician notification created successfully");
         return saved;
     }
 

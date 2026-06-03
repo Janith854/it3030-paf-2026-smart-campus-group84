@@ -22,11 +22,13 @@ export default function LoginPage() {
     role: 'USER'
   });
 
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
   useEffect(() => {
-    // Render official Google button on mount
-    if (window.google && window.google.accounts) {
+    // Render official Google button on mount — only if client ID is configured
+    if (googleClientId && window.google && window.google.accounts) {
       window.google.accounts.id.initialize({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID || '',
+        client_id: googleClientId,
         callback: handleGoogleCallback,
       });
       window.google.accounts.id.renderButton(
@@ -40,7 +42,7 @@ export default function LoginPage() {
         }
       );
     }
-  }, [isRegistering]);
+  }, [isRegistering, googleClientId]);
 
   useEffect(() => {
     if (user) {
@@ -263,11 +265,15 @@ export default function LoginPage() {
                 )}
               </button>
             </form>
-            <div className="auth-divider">or sign in with</div>
-            <div 
-              id="google-signin-button" 
-              style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}
-            ></div>
+            {googleClientId && (
+              <>
+                <div className="auth-divider">or sign in with</div>
+                <div 
+                  id="google-signin-button" 
+                  style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}
+                ></div>
+              </>
+            )}
           </>
           )}
 

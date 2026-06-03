@@ -6,6 +6,7 @@ import com.smartcampus.model.Notification;
 import com.smartcampus.repository.NotificationRepository;
 import com.smartcampus.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Module D — Notifications
  * Member 4: feature/auth
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
@@ -41,12 +43,12 @@ public class NotificationServiceImpl implements NotificationService {
             }
             
             if (!shouldSend) {
-                System.out.println("[DEBUG] Notification skipped due to user preference: " + type);
+                log.debug("Notification skipped due to user preference: {}", type);
                 return null;
             }
         }
 
-        System.out.println("[DEBUG] Creating notification for user: " + userId + " - Title: " + title);
+        log.debug("Creating notification for user: {} - Title: {}", userId, title);
         Notification n = new Notification();
         n.setUserId(userId);
         n.setTitle(title);
@@ -55,7 +57,7 @@ public class NotificationServiceImpl implements NotificationService {
         n.setReferenceId(referenceId);
         n.setCreatedAt(java.time.LocalDateTime.now());
         Notification saved = notificationRepository.save(n);
-        System.out.println("[DEBUG] Notification saved with ID: " + saved.getId());
+        log.debug("Notification saved with ID: {}", saved.getId());
         return saved;
     }
 
