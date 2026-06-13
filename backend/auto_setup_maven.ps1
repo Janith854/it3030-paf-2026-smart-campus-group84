@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 $MavenVersion = "3.9.6"
 $MavenZipUrl = "https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/$MavenVersion/apache-maven-$MavenVersion-bin.zip"
-$BackendDir = Join-Path $PSScriptRoot "backend"
+$BackendDir = $PSScriptRoot
 $MavenParentDir = Join-Path $BackendDir ".maven"
 $MavenDir = Join-Path $MavenParentDir "apache-maven-$MavenVersion"
 $MavenZipPath = Join-Path $MavenParentDir "maven.zip"
